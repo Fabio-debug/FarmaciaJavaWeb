@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSystem.xhtml"
+>
+	<ui:define name="menu">
+		<ui:include src="/includes/menu.xhtml" />
+	</ui:define>
+	
+	<ui:define name="content">
+	
+	<h:form id="frmProducts">
+
+	<p:dataTable id="tbProducts" 
+	widgetVar="tabelaProducts"
+	emptyMessage="Nenhuma informação encontrado!"
+	value="#{MBProducts.itens}"
+	var="item"
+	FilteredValue="#{MBProducts.itensFiltrados}"
+	paginator="true"
+	rows="7"
+	>
+	
+	<f:facet name="header">LISTAGEM DE PRODUTOS</f:facet>
+		
+	    <p:column headerText="Codigo" sortBy="#{item.codigo}"  filterBy="#{item.codigo}">
+			<h:outputText value="#{item.codigo}"/>
+	    </p:column>
+	 
+	    <p:column headerText="DESCRIÇÃO">	        
+			<h:outputText value="#{item.descricao}"/>
+	    </p:column>
+	    
+	     <p:column headerText="PRECO">	        
+			<h:outputText value="#{item.preco}"/>
+	    </p:column>
+	    
+	    <p:column headerText="QUANTIDADE">	        
+			<h:outputText value="#{item.quantidade}"/>
+	    </p:column>
+	    
+	     <p:column headerText="FORNECEDOR">	        
+			<h:outputText value="#{item.fornecedores.descricao}"/>
+	    </p:column>
+	    
+	  
+	    
+	    <p:column headerText="OPÇÕES">	        
+			
+			<p:commandButton icon="ui-icon-trash"> 
+				
+	
+	 		</p:commandButton>
+	       
+	       
+			<p:commandButton icon="ui-icon-pencil">
+	 		
+	 		</p:commandButton>
+	 		
+	    </p:column>
+		    
+		<f:facet name="footer">
+			<p:commandButton value="Novo" 	actionListener="#{MBProducts.prepararNovo}"
+			oncomplete="PF('dlgproNovo').show();"
+			update=":frmproNovo:pnproNovo :msgGlobal"
+			/>
+			</f:facet>
+	
+	</p:dataTable>
+</h:form>
+
+<p:dialog widgetVar="dlgproNovo" closable="false" draggable="false" resizable="false"
+header="Cadastra Produtos"
+modal="true"
+appendTo="@(body)"
+update=":frmproNovo:pnproNovo :msgGlobal"
+>
+<h:form id="frmproNovo">
+<h:panelGrid id="pnproNovo" columns="2">
+
+<p:outputLabel value="Descricão:" />
+<h:inputText size="15" maxlength="50" value="#{MBProducts.products.descricao}"
+	required="true" requiredMessage="Descricao do Fornecedor e Obrigatoria."
+ />
+
+<p:outputLabel value="Preço:" />
+<h:inputText size="5" maxlength="50" value="#{MBProducts.products.preco}" 
+	required="true" requiredMessage="Descricao do Fornecedor e Obrigatoria."
+/>
+
+<p:outputLabel value="Quantidade:" />
+<h:inputText size="5" maxlength="50" value="#{MBProducts.products.quantidade}" 
+		required="true" requiredMessage="Descricao do Fornecedor e Obrigatoria."
+/>
+
+<p:outputLabel value="Fornecedor:" />
+
+<p:selectOneMenu value="#{MBProducts.products.fornecedores.codigo}">
+	<f:selectItem itemValue="" itemLabel="Selecione" />
+	<f:selectItems value="#{MBProducts.comboProviders}"
+	var="item"
+	itemValue="#{item.codigo}"
+	itemLabel="#{item.descricao}"
+	>		
+	</f:selectItems>
+	
+</p:selectOneMenu>
+
+</h:panelGrid>
+<h:panelGrid columns="2">
+
+</h:panelGrid>
+	<p:commandButton value="Cadastra" />
+	<p:commandButton value="Cancelar" onclick="PF('dlgproNovo').hide();"/>
+	</h:form>
+</p:dialog>
+
+	
+	</ui:define>
+
+</ui:composition>

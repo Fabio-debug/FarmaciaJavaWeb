@@ -1,0 +1,30 @@
+package br.com.farmacia.test;
+
+import br.com.farmacia.DAO.ProductsDAO;
+import br.com.farmacia.domain.Products;
+import br.com.farmacia.domain.Providers;
+
+
+public class ProdutoDAOTest {
+
+	 public static void salvar {
+			
+		 	Products p1 = new Products();
+		 		
+		 		p1.setDescricao("Fabio");
+		 		p1.setPreco(23.43);
+		 		p1.setQuantidade(19);
+		 		
+		 		Providers p2 = new Providers();
+		 		p2.setCodigo(246);
+		
+		 		p1.setFornecedores(p2);
+		 		ProductsDAO pdao = new ProductsDAO();
+		 		
+		 			pdao.salvar(p1);
+	
+	 }
+		 
+	
+	
+}

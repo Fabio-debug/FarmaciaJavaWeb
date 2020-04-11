@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:p="http://primefaces.org/ui"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+
+<h:form>
+
+<p:menubar>    
+	  
+	  <p:submenu label="INFORMAÇÃO DA FARMACIA">
+		 	<p:menuitem value="Proprietário" url="https://www.facebook.com/fabio.liima.9404/" target="_blank"/>
+			<p:menuitem value="Historico da Farmacia" url="https://farmacotecnica.com.br/historia-da-profissao-farmaceutica-no-brasil-e-no-mundo" target="_blank"/>
+	  </p:submenu>
+
+	  <p:submenu label="CADASTROS">
+		 	<p:menuitem value="Fornecedores" outcome="/pages/providers.xhtml" />
+			<p:menuitem value="Produtos" outcome="/pages/products.xhtml"/>
+	  </p:submenu>
+	
+	  <p:submenu label="COVID-19">
+			<p:menuitem value="Sintomas" url="https://dasa.com.br/coronavirus" target="_blank"/>
+			<p:menuitem value="Prevenção" url="https://dasa.com.br/coronavirus#lp-pom-block-1458" target="_blank"  />
+			<p:menuitem value="Tratamentos" url="https://exame.abril.com.br/ciencia/novo-tratamento-para-coronavirus-e-testado-em-tecido-humano/" target="_blank" />
+			<p:menuitem value="Transmissão" url="https://dasa.com.br/coronavirus#lp-pom-block-1518"  target="_blank" />
+			<p:menuitem value="Estatísticas" url="https://valor.globo.com/brasil/noticia/2020/03/24/brasil-tem-2201-casos-confirmados-de-coronavirus-e-46-mortes-diz-saude.ghtml"  target="_blank" />
+	  </p:submenu>
+	 
+	  
+	  
+	</p:menubar>
+	<p:column>
+	<img src="resources/img/drogariasfarmacias.jpg" alt="Farmacia do Fabio" width="1200" height="100"/>
+	</p:column>
+</h:form>
+
+
+</ui:composition >

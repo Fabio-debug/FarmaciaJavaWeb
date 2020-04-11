@@ -1,0 +1,104 @@
+package br.com.farmacia.DAO;
+
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import br.com.farmacia.domain.Products;
+import br.com.farmacia.domain.Providers;
+import br.com.farmacia.factory.ConnectionFactory;
+
+public class ProductsDAO {
+
+	
+	 public void salvar (Products p) throws SQLException {
+			
+		 	StringBuilder sql = new StringBuilder();		
+			sql.append("INSERT INTO produtos ");
+			sql.append("(descricao,  preco, quantidade, fornecedores) ");
+			sql.append("VALUES(?,?,?,?)");
+			
+			Connection connection = ConnectionFactory.conectar();
+
+			PreparedStatement comando = connection.prepareStatement(sql.toString());
+			
+			comando.setString(1, p.getDescricao());
+			comando.setDouble(2, p.getPreco());
+			comando.setLong(3, p.getQuantidade());
+			comando.setString(4, p.getFornecedores());
+			
+			comando.executeUpdate();
+
+		 	}
+	 
+	 /*	public ArrayList<Products> listar()throws SQLException {
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT p.codigo, p.descricao ,p.quantidade ,p.preco, pd.codigo, pd.descricao ");
+			sql.append("FROM produtos p ");	
+			sql.append("INNER JOIN fornecedores pd ON pd.codigo = p.fornecedores_codigo ");
+
+			Connection connection = ConnectionFactory.conectar();
+			
+			PreparedStatement comando = connection.prepareStatement(sql.toString());
+			
+			ResultSet resultado = comando.executeQuery();
+
+			ArrayList<Products>lista = new ArrayList<Products>();
+			
+			while (resultado.next()){
+				Providers pd = new Providers();
+				pd.setCodigo(resultado.getLong("pd.codigo"));
+				pd.setDescricao(resultado.getString("pd.descricao"));
+			
+				
+				Products pro = new Products();
+				pro.setCodigo(resultado.getLong("p.codigo"));
+				pro.setDescricao(resultado.getString("p.descricao"));
+				pro.setQuantidade(resultado.getInt("p.quantidade"));
+				pro.setPreco(resultado.getDouble("p.preco"));
+				pro.setFornecedores(pd);
+				
+				lista.add(pro);
+				
+			}
+			return lista;
+	}	*/
+
+	 
+	 public void excluir (Products pro) throws SQLException {
+			StringBuilder sql = new StringBuilder();
+			sql.append("DELETE FROM produtos");
+			sql.append(" WHERE codigo = ?");
+			
+			Connection connection = ConnectionFactory.conectar();
+
+			PreparedStatement comando = connection.prepareStatement(sql.toString());
+			comando.setLong(1, pro.getCodigo());
+			comando.executeUpdate();
+		}
+	 
+		public void editar (Products pro) throws SQLException {
+			
+			StringBuilder sql = new StringBuilder();
+		
+			sql.append("UPDATE produtos ");
+			sql.append("SET descricao = ?, quantidade = ?, preco = ?, fornecedores = ? ");
+			sql.append("WHERE codigo = ?");
+			
+			Connection connection = ConnectionFactory.conectar();
+			
+			PreparedStatement comando = connection.prepareStatement(sql.toString());
+			
+			comando.setString(1,pro.getDescricao());
+			comando.setLong(2,pro.getQuantidade());
+			comando.setDouble(3,pro.getPreco());
+			comando.setLong(4,pro.getFornecedores().getCodigo());
+			comando.setLong(5, pro.getCodigo());
+			comando.executeUpdate();
+		 	
+		 	}
+
+}

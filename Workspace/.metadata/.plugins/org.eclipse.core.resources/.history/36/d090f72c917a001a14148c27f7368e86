@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:p="http://primefaces.org/ui"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+template="/templates/modeloSystem.xhtml"
+>
+
+<ui:define name="menu">
+	<ui:include src="/includes/menu.xhtml" />
+</ui:define>
+
+<ui:define name="content">
+<h:form id="frmforproviders">
+	<p:dataTable id="tbproviders"
+	 emptyMessage="Nenhuma informação Obtida!"	
+	value="#{MBProviders.itens}"
+	var="item"
+	FilteredValue="#{MBProviders.itensFiltrados}"
+	paginator="true"
+	rows="1000"
+	>
+	  
+	  <f:facet name="header">LISTA DE FORNECEDORES</f:facet>
+	  
+	    <p:column headerText="CODIGO" >
+	        <h:outputText value="#{item.codigo}" />
+	    </p:column>
+	 
+	    <p:column headerText="FORNECEDORES">
+	     	    <h:outputText value="#{item.descricao}" />
+	    </p:column>
+	    
+	    	 <p:column headerText="REMOÇÃO">	        
+			
+				<p:commandButton icon="ui-icon-trash"  
+					oncomplete="PF('dlgforExcluir').show();" update=":frmforExcluir:pnforExcluir"> 
+					
+	 				<f:setPropertyActionListener value="#{item}" target="#{MBProviders.providers}"></f:setPropertyActionListener>
+	 			
+	 			</p:commandButton >
+	       </p:column>
+	       
+	       <p:column headerText="EDIÇÃO">
+				<p:commandButton icon="ui-icon-pencil" 
+			oncomplete="PF('dlgforEditar').show();" update=":frmforEditar:pnforEditar">	
+	 				<f:setPropertyActionListener value="#{item}" target="#{MBProviders.providers}"></f:setPropertyActionListener>
+	 			</p:commandButton>
+		 	
+	    	</p:column>
+	    
+	    
+	
+		<f:facet name="footer">
+			
+			<p:commandButton value="Novo" actionListener="#{MBProviders.prepararNovo}"  
+			oncomplete="PF('dlgforNovo').show();" update=":frmforNovo:pnforNovo" />
+			</f:facet>
+		 		
+	</p:dataTable>	
+</h:form>
+
+
+<p:dialog widgetVar="dlgforNovo" closable="false" draggable="false" resizable="false"
+header="Cadastra Fornecedor"
+modal="true"
+appendTo="@(body)"
+>
+<h:form id="frmforNovo">
+	<h:panelGrid id="pnforNovo" columns="2">
+		<p:outputLabel value="Descrição"/>
+			<h:inputText Size="30" maxlength="50" value="#{MBProviders.providers.descricao}"/>
+	</h:panelGrid>
+	<p:panelGrid columns="2">
+		
+		<p:commandButton value="Gravar" actionListener="#{MBProviders.novo}" 
+		oncomplete="PF('dlgforNovo').hide();" update=":frmforproviders:tbproviders :msgGlobal"/>
+		
+		<p:commandButton value="Cancelar" onclick="PF('dlgforNovo').hide();"/>
+		
+	</p:panelGrid>
+</h:form>
+</p:dialog>
+
+<p:dialog widgetVar="dlgforExcluir" closable="false" draggable="false" resizable="false"
+header="Excluir Fornecedores"
+modal="true"
+appendTo="@(body)"
+>
+	<h:form id="frmforExcluir">
+		<h:panelGrid id="pnforExcluir" columns="2">
+			
+			<h:outputText value="Código :" />
+			<h:outputText value="#{MBProviders.providers.codigo}" />
+			
+			<h:outputText value="Descrição :" />
+			<h:outputText value="#{MBProviders.providers.descricao}" />
+			
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2">
+			
+			<p:commandButton value="Excluir" actionListener="#{MBProviders.excluir}" 
+				oncomplete="PF('dlgforExcluir').hide();" update=":frmforproviders:tbproviders :msgGlobal"/>
+			<p:commandButton value="Cancelar" onclick="PF('dlgforExcluir').hide();"/>
+			
+		</h:panelGrid>
+		
+	</h:form>
+	
+</p:dialog>
+
+
+<p:dialog widgetVar="dlgforEditar" closable="false" draggable="false" resizable="false"
+header="Editar Fornecedores"
+modal="true"
+appendTo="@(body)"
+>
+	<h:form id="frmforEditar">
+		<h:panelGrid id="pnforEditar" columns="2">
+				<h:outputText value="Código"/>
+				<h:outputText value="#{MBProviders.providers.codigo}" />	
+
+				<h:outputLabel value="Descricao" for="txtEdtfor"/>
+				<h:inputText value="#{MBProviders.providers.descricao}" />
+				
+				</h:panelGrid>
+		
+				<h:panelGrid columns="2">
+						<p:commandButton value="Editar" actionListener="#{MBProviders.editar}"
+								oncomplete="PF('dlgforEditar').hide()"
+			 					update=":frmforproviders:tbproviders :msgGlobal" />
+						<p:commandButton value="Cancelar" onclick="PF('dlgforEditar').hide();"/>
+							
+				</h:panelGrid>
+			</h:form>
+
+</p:dialog>
+
+
+</ui:define>
+
+
+</ui:composition>

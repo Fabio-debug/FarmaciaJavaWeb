@@ -1,0 +1,34 @@
+package br.com.farmacia.test;
+
+import java.sql.SQLException;
+
+import org.junit.Test;
+
+import br.com.farmacia.DAO.ProductsDAO;
+import br.com.farmacia.domain.Products;
+import br.com.farmacia.domain.Providers;
+
+
+public class ProdutoDAOTest {
+	
+	@Test
+	 public static void salvar() throws SQLException {
+			
+		 	Products p1 = new Products();
+		 		
+		 		p1.setDescricao("DIPIRONA");
+		 		p1.setPreco(23.43);
+		 		p1.setQuantidade(19);
+		 		
+		 		
+	
+		 		ProductsDAO prodao = new ProductsDAO();
+		 		
+		 		prodao.setFornecedores(p2);
+		 			prodao.salvar(p1);
+	
+	 }
+		 
+	
+	
+}

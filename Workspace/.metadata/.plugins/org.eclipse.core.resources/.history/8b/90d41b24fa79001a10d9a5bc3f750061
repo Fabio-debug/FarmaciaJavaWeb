@@ -1,0 +1,259 @@
+package br.com.farmacia.DAO;
+
+
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import br.com.farmacia.domain.Providers;
+import br.com.farmacia.factory.ConnectionFactory;
+
+public class ProvidersDAO {
+
+
+public void salvar (Providers p) throws SQLException {
+		
+	 	StringBuilder sql = new StringBuilder();		
+		sql.append("INSERT INTO fornecedores ");
+		sql.append("(descricao) ");
+		sql.append("VALUES(?)");
+		
+		Connection connection = ConnectionFactory.conectar();
+
+		PreparedStatement comando = connection.prepareStatement(sql.toString());
+		comando.setString(1, p.getDescricao());
+		comando.executeUpdate();
+
+	 	}
+	
+	
+	public void excluir (Providers p) throws SQLException {
+		StringBuilder sql = new StringBuilder();
+		sql.append("DELETE FROM fornecedores");
+		sql.append(" WHERE codigo = ?");
+		
+		Connection connection = ConnectionFactory.conectar();
+
+		PreparedStatement comando = connection.prepareStatement(sql.toString());
+		comando.setLong(1, p.getCodigo());
+		comando.executeUpdate();
+	}	
+	
+	 	
+	 	public void editar (Providers p) throws SQLException {
+		
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append("UPDATE fornecedores ");
+		sql.append("SET descricao = ? ");
+		sql.append("WHERE codigo =  ?");
+		
+		Connection connection = ConnectionFactory.conectar();
+		
+		PreparedStatement comando = connection.prepareStatement(sql.toString());
+		comando.setString(1,p.getDescricao());
+		comando.setLong(2, p.getCodigo());
+		comando.executeUpdate();
+	 	
+	 	}
+	
+	 	public Providers buscaPorCodigo(Providers p)throws SQLException{
+	 		StringBuilder sql = new StringBuilder();
+			
+			sql.append("SELECT codigo,descricao ");
+			sql.append("FROM fornecedores ");
+			sql.append("WHERE codigo =  ?");
+			
+			Connection Connection = ConnectionFactory.conectar();
+			
+			PreparedStatement comando = Connection.prepareStatement(sql.toString());
+			
+			comando.setLong(1, p.getCodigo());
+			
+			ResultSet resultado = comando.executeQuery();
+			Providers retorno = null;
+			
+			if(resultado.next()){
+				retorno = new Providers();
+				retorno.setCodigo(resultado.getLong("codigo"));
+				retorno.setDescricao(resultado.getString("descricao"));
+			}
+			
+			return retorno;
+	 }
+	 	
+	
+		
+	
+		public ArrayList<Providers>buscarPorDescricao(Providers p)throws SQLException {
+			
+	 		StringBuilder sql = new StringBuilder();
+			sql.append("SELECT codigo,descricao ");
+			sql.append("FROM fornecedores ");	
+			sql.append("WHERE descricao LIKE ? ");
+			sql.append("ORDER BY descricao ASC");
+		
+			Connection connection = ConnectionFactory.conectar();
+		
+			PreparedStatement comando = connection.prepareStatement(sql.toString());
+			
+			comando.setString(1, "%" + p.getDescricao() + "%");
+			
+			ResultSet resultado = comando.executeQuery();
+			
+			ArrayList<Providers>lista = new ArrayList<Providers>();
+	 		
+			while ( resultado.next() ){
+				Providers item = new Providers();
+				item.setCodigo(resultado.getLong("codigo"));
+				item.setDescricao(resultado.getString("descricao"));
+				
+				lista.add(item);
+			}
+	 		return lista;
+		}
+	
+	
+	 	public ArrayList<Providers> listar()throws SQLException {
+	 			 		
+	 		StringBuilder sql = new StringBuilder();
+			sql.append("SELECT codigo,descricao ");
+			sql.append("FROM fornecedores ");
+			sql.append("ORDER BY descricao DESC ");
+			
+			Connection Connection = ConnectionFactory.conectar();
+			
+			PreparedStatement comando = Connection.prepareStatement(sql.toString());
+			
+			ResultSet resultado = comando.executeQuery();
+
+			ArrayList<Providers>lista = new ArrayList<Providers>();
+	 		
+			while ( resultado.next() ){
+				Providers p = new Providers();
+				p.setCodigo(resultado.getLong("codigo"));
+				p.setDescricao(resultado.getString("descricao"));
+				
+				lista.add(p);
+			}
+	 		return lista;
+	 	}
+		
+	 public static void main(String[] args){
+		
+/*	Providers p1 = new Providers();
+		Providers p2 = new Providers();
+		
+		p1.setDescricao("Fabio");
+		p2.setDescricao("Henrique");
+		
+		ProvidersDAO pdao = new ProvidersDAO();
+		
+		try {
+			pdao.salvar(p1);
+			pdao.salvar(p2);
+			System.out.println("Salvo com sucesso!!");
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			System.out.println("Erro ao Salvaa!!");
+			
+		}
+	
+	 	Providers p = new Providers();
+		p.setCodigo(122);
+		
+		ProvidersDAO pdao = new ProvidersDAO();
+	
+		try{
+			pdao.excluir(p);
+			System.out.println("Deletado com Sucesso!!");
+		
+		} catch (SQLException e) {
+			System.out.println("Erro ao delatar!!");
+			e.printStackTrace();
+		}
+		
+	 	
+		Providers p = new Providers();
+		p.setCodigo(125);
+		p.setDescricao("HenriqueFabio");
+		
+		ProvidersDAO pdao = new ProvidersDAO();
+	
+		try {
+			pdao.editar(p);
+			System.out.println("Editado com sucesso!!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Erro ao Editar!!");
+		}
+	
+	 
+	 }
+	 		
+	
+		 Providers p = new Providers();
+		p.setCodigo(125);
+		
+		ProvidersDAO pdao = new ProvidersDAO();
+		
+		try {
+			
+			Providers pResult = pdao.buscaPorCodigo(p);
+			System.out.println("Resulta:!!" + pResult);
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			System.out.println("Erro ao Buscar!!");
+			
+		}
+		
+	 }
+		
+		Providers p = new Providers();
+		
+		ProvidersDAO pdao = new ProvidersDAO();
+		
+		try {
+			
+			ArrayList<Providers>lista = pdao.listar();
+			for(Providers p : lista){
+				System.out.println("Resultado:" + p);
+			}
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			System.out.println("Erro ao Buscar!!");
+			
+		}
+	
+	 }
+*/	
+	/*	Providers p = new Providers();
+		p.setDescricao("q");
+	
+		providersDAO pdao = new providersDAO(); 
+		
+		try {
+			
+			ArrayList<Providers>lista = pdao.buscarPorDescricao(p);
+			
+			for (Providers pR : lista) {
+				
+				System.out.println("Resultado:" + pR);
+			
+			}
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			System.out.println("Erro ao Buscar!!");
+			
+		}
+	*/
+
+	 }

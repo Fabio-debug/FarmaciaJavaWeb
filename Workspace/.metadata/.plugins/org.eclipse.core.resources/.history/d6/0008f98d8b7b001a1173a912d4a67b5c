@@ -1,0 +1,144 @@
+ package br.com.farmacia.bean;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+
+import br.com.farmacia.DAO.ProductsDAO;
+import br.com.farmacia.DAO.ProvidersDAO;
+import br.com.farmacia.domain.Products;
+import br.com.farmacia.domain.Providers;
+import br.com.farmacia.util.JSFutil;
+
+
+@ManagedBean(name = "MBProducts")
+@ViewScoped
+
+public class ProductsBean {
+
+	private Products products;
+	private ArrayList<Products>itens;
+	private ArrayList<Products>itensFiltrados;
+	
+	private ArrayList<Providers>comboProviders;
+
+	public ArrayList<Providers> getComboProviders() {
+		return comboProviders;
+	}
+
+	public void setComboProviders(ArrayList<Providers> comboProviders) {
+		this.comboProviders = comboProviders;
+	}
+
+	public Products getProducts() {
+		return products;
+	}
+
+	public void setProducts(Products products) {
+		this.products = products;
+	}
+
+
+	public ArrayList<Products> getItens() {
+		return itens;
+	}
+
+	public void setItens(ArrayList<Products> itens) {
+		this.itens = itens;
+	}
+
+	public ArrayList<Products> getItensFiltrados() {
+		return itensFiltrados;
+	}
+
+	public void setItensFiltrados(ArrayList<Products> itensFiltrados) {
+		this.itensFiltrados = itensFiltrados;
+	}
+
+@PostConstruct
+public void prepararPesquisa() {
+	
+	try {
+		
+		ProductsDAO prodao = new ProductsDAO();
+		itens = prodao.listar();
+		
+	} catch (SQLException e) {
+		
+		JSFutil.adicionarMensagemErro("AKI");
+		e.printStackTrace();
+		
+	}
+
+}
+
+public void prepararNovo(){
+	try {
+		
+		products = new Products();
+		ProvidersDAO prodao = new ProvidersDAO();
+		comboProviders = prodao.listar();
+		
+	} catch (SQLException e) {
+		e.printStackTrace();
+		JSFutil.adicionarMensagemErro("ex.getMessage()");
+	}
+}
+
+public void novo() {
+	
+	try {
+
+		ProductsDAO pdao = new ProductsDAO();
+		pdao.salvar(products);
+		
+		itens = pdao.listar();
+		
+		JSFutil.adicionarMensagemSucesso("Produtos Salvo com sucesso!");
+	} catch (SQLException e) {
+		JSFutil.adicionarMensagemErro("ex.getMessage()");
+		e.printStackTrace();
+	}
+		
+}
+
+public void excluir () {
+	try {
+		ProductsDAO pdao = new ProductsDAO();
+		pdao.excluir(products);
+		
+		itens = pdao.listar();
+		
+		JSFutil.adicionarMensagemSucesso("Produto Exluido com sucesso!");
+	
+	} catch (SQLException e) {
+		JSFutil.adicionarMensagemErro("Produto Exluido com sucesso!");
+		e.printStackTrace();
+	
+	}
+		
+}
+
+public void editar () {
+	try {
+		ProductsDAO prodao = new ProductsDAO();
+		prodao.editar(products);
+		
+		itens = prodao.listar();
+		
+		JSFutil.adicionarMensagemSucesso("Produto Editado com sucesso!");
+	
+	} catch (SQLException e) {
+	
+		JSFutil.adicionarMensagemErro("ex.getMessage()"); 
+		e.printStackTrace();
+	
+	}
+		
+}
+
+
+}
